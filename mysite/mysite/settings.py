@@ -77,6 +77,12 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Absolute filesystem path to the directory that will hold user-uplo    aded files.
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+ 
+# URL that handles the media served from MEDIA_ROOT.
+MEDIA_URL = '/media/'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/

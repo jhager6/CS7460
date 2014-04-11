@@ -32,5 +32,5 @@ class IdeateIdea(models.Model):
      ideateidea_title = models.CharField(max_length=100)
      user_id = models.ForeignKey(UserInfo)
      contest_id = models.ForeignKey(ContestInfo)
-     ideateimage_url = models.CharField(max_length=100) 
+     ideateimage_store_location = models.FileField(upload_to='documents/%Y/%m/%d') 
      ideateidea_date = models.DateTimeField('Ideate Idea Date')  
