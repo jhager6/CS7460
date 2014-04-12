@@ -1,12 +1,12 @@
 from django.shortcuts import render
 
-m django.shortcuts import render_to_response
+from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
-from myproject.myapp.models import Document
-from myproject.myapp.forms import DocumentForm
+from ideaphase.models import Document
+from myproject.forms import DocumentForm
 
 def list(request):
     # Handle file upload
@@ -30,4 +30,5 @@ def list(request):
         {'documents': documents, 'form': form},
         context_instance=RequestContext(request)
     )
+
 
