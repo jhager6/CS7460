@@ -1,9 +1,9 @@
 from django.shortcuts import render
 
-<<<<<<< HEAD
+
 def overwrite_view_here(self):
     return 1
-=======
+
 m django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
@@ -35,4 +35,4 @@ def list(request):
         context_instance=RequestContext(request)
     )
 
->>>>>>> aa5325e8e00b58ddaf5e622a1417a972046f4d19
+
