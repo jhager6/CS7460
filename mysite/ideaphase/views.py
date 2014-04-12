@@ -5,24 +5,24 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
-from ideaphase.models import Document
-from myproject.forms import DocumentForm
+from ideaphase.models import IdeateIdea
+from ideaphase.forms import IdeateIdeaForm
 
 def list(request):
     # Handle file upload
     if request.method == 'POST':
-        form = DocumentForm(request.POST, request.FILES)
+        form = IdeateIdeaForm(request.POST, request.FILES)
         if form.is_valid():
-            new_ideateimage_store_location = Document(ideateimage_store_location = request.FILES['ideateimage_store_location'])
+            new_ideateimage_store_location = IdeateIdea(ideateimage_store_location = request.FILES['ideateimage_store_location'])
             new_ideateimage_store_location.save()
 
             # Redirect to the document list after POST
             return HttpResponseRedirect(reverse('ideaphase.views.list'))
     else:
-        form = DocumentForm() # A empty, unbound form
+        form = IdeateIdeaForm() # A empty, unbound form
 
     # Load documents for the list page
-    documents = Document.objects.all()
+    documents = IdeateIdea.objects.all()
 
     # Render list page with the documents and the form
     return render_to_response(
