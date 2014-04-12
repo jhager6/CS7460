@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def overwrite_view_here(self):
+    return 1
