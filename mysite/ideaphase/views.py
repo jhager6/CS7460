@@ -1,16 +1,12 @@
 from django.shortcuts import render
 
-
-def overwrite_view_here(self):
-    return 1
-
-m django.shortcuts import render_to_response
+from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
-from myproject.myapp.models import Document
-from myproject.myapp.forms import DocumentForm
+from ideaphase.models import Document
+from myproject.forms import DocumentForm
 
 def list(request):
     # Handle file upload
