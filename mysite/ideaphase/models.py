@@ -61,8 +61,10 @@ class IdeateIdea(models.Model):
      ideateimage_store_location = models.FileField(upload_to='documents/%Y/%m/%d')
  
      ideateidea_date = models.DateTimeField('Ideate Idea Date')
+
+     ideateidea_description = models.CharField(max_length=500)
  
-class IdeateideaComments(models.Model):
+class IdeateIdeaComments(models.Model):
  
      comment_id = models.AutoField(primary_key=True)
  
@@ -74,7 +76,7 @@ class IdeateideaComments(models.Model):
  
      ideateidea_commentdate = models.DateTimeField('Ideateidea Comment date')
  
-class IdeateideaVote(models.Model):
+class IdeateIdeaVote(models.Model):
  
      ideatevote_id = models.AutoField(primary_key=True)
  
