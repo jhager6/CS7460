@@ -1,17 +1,38 @@
 {% extends "ideaphase/base.html" %}
 
 {% block content %}
-    <form method='POST', action=''> {% csrf_token %}
-        {{ submission_form.as_p }}
-        <input type="submit" class="btn btn-default btn-lg">
-        </button>
+    <form method='POST', enctype="multipart/form-data" action=''> 
+        {% csrf_token %}
+        <p>{{ form.non_field.errors}}</p>
+        <p>{{ form.ideateimage_store_location.label_tag }}{{ form.ideateimage_store_location.help_text }}</p>
+        <p>{{ form.ideateimage_store_location.errors }}</p>
+        <p>{{ form.ideateimage_store_location }}</p>
+        <input type="submit" value="Upload" class="btn btn-default btn-lg" >
     </form>
 
     <hr>
-    {% for document in documents %}
-			<h1>{{ documents.ideateimage_store_location.name }}</h1>	
-            <p><img src="{{ document.ideateimage_store_location.url }}"></p>
+    
+{% if submissions %}
+    <ul>
+        {%for submission in submissions %}
+            <li><a href="{{ submission.ideateimage_store_location.url }}">{{ submission.ideateimage_store_location.name }} </a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    No Ideas Uploaded
+{% endif %}
+
+
+    <!--
+    {% if submissions %}
+        {% for cur_submission in submissions %}
+			<h1>{{ cur_submission.ideateimage_store_location.name }}</h1>	
+            <p><img src="{{ cur_submission.ideateimage_store_location.url }}"></p>
                     
-            <p>{{ documents.ideatedesc_store }}</p>                
-    {% endfor %}
+            <p>{{ cur_submission.ideatedesc_store }}</p>                
+        {% endfor %}
+    {% else %}
+        <p>No Ideas Uploaded</p>
+    {% endif %}  
+    -->
 {% endblock %}
