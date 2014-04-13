@@ -9,12 +9,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('ideaphase.views',
-    url(r'^home/$', 'home', name='home'),                    
-    url(r'^list/$', 'list', name='list'),
-    url(r'^profile/$', 'profile', name='profile'),
-    # url(r'^blog/', include('blog.urls')),
+urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^home/$', 'ideaphase.views.home', name='home'),                    
+    url(r'^list/$', 'ideaphase.views.list', name='list'),
+    url(r'^profile/$', 'ideaphase.views.profile', name='profile'),
+    # url(r'^blog/', include('blog.urls')),
     
 )
 
