@@ -52,15 +52,9 @@ ROOT_URLCONF = 'mysite.urls'
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
-TEMPLATE_CONTEXT_PROCESSOR = ( 
-'django.contrib.auth.context_processors.auth',
-'django.core.context_processors.debug',
-'django.core.context_processors.i18n',
-'django.core.context_processors.media',
-'django.core.context_processors.static',
-'django.core.context_processors.tz',
-'django.contrib.messages.context_processors.messages',
-)
+#Attempted to create a custom user model. Kept incase of second attempt.
+#AUTH_USER_MODEL = 'ideaphase.UserInfo'
+
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
@@ -101,3 +95,6 @@ STATICFILES_FINDERS = (
     )
 STATIC_ROOT =  BASE_DIR
 STATIC_URL = '/ideaphase/static/'
+
+ACTIVE_USER = ''
+LOGIN_BOOL = False

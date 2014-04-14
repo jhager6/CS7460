@@ -1,5 +1,5 @@
 from django.contrib import admin
-from ideaphase.models import UserInfo
+from ideaphase.models import UserInfo,ContestInfo
 
 # Register your models here.
 admin.site.register(UserInfo)

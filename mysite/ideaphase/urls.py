@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^home/$', 'ideaphase.views.home', name='home'),                    
     url(r'^list/$', 'ideaphase.views.list', name='list'),
     url(r'^profile/$', 'ideaphase.views.profile', name='profile'),
+    url(r'^logout/$', 'ideaphase.views.logout', name='logout'),
     # url(r'^blog/', include('blog.urls')),
     
 )

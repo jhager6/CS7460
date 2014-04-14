@@ -22,4 +22,12 @@ class IdeateIdeaCommentSubmissionForm(forms.Form):
 #creates the voting form
 class IdeateIdeaVoteSubmission(forms.Form):
     ideateidea_vote_store = forms.DateTimeField()
+
+class SystemLogIn(forms.Form):
+    username = forms.CharField(
+        label='Username'
+        )
+    password = forms.CharField(
+        label='Password'
+        )
     

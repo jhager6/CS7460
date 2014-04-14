@@ -9,13 +9,12 @@ from django.conf.urls.static import static
 from django.views.generic import RedirectView
 
 urlpatterns = patterns('',
-    url(r'^admin/', include(admin.site.urls)),                   
+    url(r'^admin/', include(admin.site.urls)),
     (r'^ideaphase/', include('ideaphase.urls')),
     url(r'^', 'ideaphase.views.home'),
     url(r'^list/', 'ideaphase.views.list'),
     url(r'^profile/', 'ideaphase.views.profile'),
-
-    
+    url(r'^logout/', 'ideaphase.views.logout'),
 
     #(r'^admin/', RedirectView.as_view(url=os.path.join(BASE_DIR, '/mysite/admin')),
 
