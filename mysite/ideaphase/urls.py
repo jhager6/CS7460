@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     url(r'^contest_landing_page/$', 'ideaphase.views.contest_landing_page', name='contest_landing_page'),
     url(r'^profile_my_submissions/$', 'ideaphase.views.profile_my_submissions', name='profile_my_submissions'),
     url(r'^submit_idea/$', 'ideaphase.views.submit_idea', name='submit_idea'),
+    url(r'^contest_main/$', 'ideaphase.views.contest_main', name='contest_main'),
     # url(r'^blog/', include('blog.urls')),
     
 )

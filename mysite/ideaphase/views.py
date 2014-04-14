@@ -23,18 +23,62 @@ from ideaphase.forms import IdeateIdeaSubmissionForm
 from ideaphase.forms import SystemLogIn
 
 #gets the user's ip address
-
 def get_ip_address(request):
     ip_address = request.META.get['REMOTE_ADDR']
     return ip_address
 
+
+#checks to see if the user ip address matches that of one in the database
 def get_client_ip_check(ip_address):
     try:
         active_user_login = UserInfo.objects.get(ip_address = ip_address)
         return True
     except:
         return False
+    
 
+
+<<<<<<< HEAD
+=======
+def list(request):
+    #Handles User Login Attempt
+    #Used on all views to verify login information.
+    #Due to time constraints, this is acting as our persistence layer
+    ip_address = request.get_host()
+    if get_client_ip_check(ip_address):
+
+        #grabs the active user information and loads it into the view
+        active_user = UserInfo.objects.get(ip_address=ip_address)
+        
+        #handles the file Idea Submission uplaods
+        if request.method=='POST':
+            submission_form = IdeateIdeaSubmissionForm(request.POST, request.FILES)
+
+            #saves the submission
+            if submission_form.is_valid():
+                new_submission_store_items = IdeateIdea(ideateimage_store_location = request.FILES['ideateimage_store_location'])
+                new_submission_store_items.save()
+
+    ##        submission_save = new_submission_store_items.save(commit=False)
+    ##        submssion_save.save()
+            
+                return HttpResponseRedirect('/ideaphase/list/')
+        else:
+            submission_form = IdeateIdeaSubmissionForm() #shows empty form
+
+        #Load documents for the list page
+        submissions = IdeateIdea.objects.all()
+        
+        #posts index for html page
+        return render_to_response("ideaphase/list.html",
+                                  {'submissions':submissions, 'form':submission_form},
+                                  context_instance=RequestContext(request)
+                                  )
+
+    else:
+        return HttpResponseRedirect('ideaphase/home/')
+
+>>>>>>> b55c111a54f56afa6c6443d54ae983f6f25901ef
 def home(request):
     #Handles User Login Attempt
     #Used on all views to verify login information.
@@ -138,7 +182,7 @@ def browse_contest_ideas(request):
 
 
 
-def contest_landing_page(request):
+def contest_main(request):
     #Handles User Login Attempt
     #Used on all views to verify login information.
     #Due to time constraints, this is acting as our persistence layer
@@ -158,10 +202,17 @@ def contest_landing_page(request):
             my_contests = ""
             other_contests = ContestParticipantAssignment.objects.all()
 
+        #if a button is clicked, it posts the variable
+        if request.method=='POST':
+            contest_click = request.POST['contest_id']
+            return render_to_response('ideaphase/contest_landing_page.html',
+                                      {'contest_id': contest_click },
+                                      context_instance=RequestContext(request))
+
     else:
         return HttpResponseRedirect('ideaphase/home/')
       
-    return render_to_response("ideaphase/contest_landing_page.html",
+    return render_to_response("ideaphase/contests_main.html",
                               {'ActiveUser':active_user,
                                'my_contests':my_contests,
                                'other_contests':other_contests,
@@ -276,6 +327,33 @@ def list(request):
 
     else:
         return HttpResponseRedirect('ideaphase/home/')
+<<<<<<< HEAD
+=======
+      
+    return render_to_response("ideaphase/submit_idea.html",
+                              {'ActiveUser':active_user},
+                              context_instance=RequestContext(request))
+
+def contest_landing_page(request):
+    #Handles User Login Attempt
+    #Used on all views to verify login information.
+    #Due to time constraints, this is acting as our persistence layer
+    ip_address = request.get_host()
+    if get_client_ip_check(ip_address):
+
+        #grabs the active user information and loads it into the view
+        active_user = UserInfo.objects.get(ip_address=ip_address)
+
+
+
+
+    else:
+        return HttpResponseRedirect('ideaphase/home/')
+      
+    return render_to_response("ideaphase/contest_landing_page.html",
+                              {'ActiveUser':active_user},
+                              context_instance=RequestContext(request))
+>>>>>>> b55c111a54f56afa6c6443d54ae983f6f25901ef
 
 ## view template below:
 ##def view_template(request):

@@ -1,36 +1,10 @@
 {% extends "ideaphase/base.html" %}
 
 {% block content %}
-    <br />
-    
-    <h3>My Contests</h3>
-    <hr>
-        {% if my_contests %}
-            {% for contest in my_contests %}
-                <div class="col-md-4">
-                    <h4><b>Name: </b>{{ contest.contest_id.contest_name }}<h4>
-                    <p><b>Contest Description: </b>{{ contest.contest_id.contest_description }}</p>
-                    <p><b>Contest End Date: </b>{{ contest.contest_id.contest_enddate }}</p>
-                    <input type="submit" value="Go to Contest >>" class="btn btn-default"/>
-                </div>
-            {% endfor %}
-        {% endif %}
-    <br />
-    
-                        
-    <h3>Other Contests</h3>
-    <hr>
-        {% if other_contests %}
-            {% for contest in other_contests %}
-                <div class="col-md-4">
-                    <h4><b>Name: </b>{{ contest.contest_id.contest_name }}<h4>
-                    <p><b>Contest Description: </b>{{ contest.contest_id.contest_description }}</p>
-                    <p><b>Contest End Date: </b>{{ contest.contest_id.contest_enddate }}</p>
-                    <input type="submit" value="Go to Contest >>" class="btn btn-default"/>
-                </div>
-                <br />
-            {% endfor %}
-        {% endif %}
-    <br />
+
+    <div class="jumbotron">
+        <h1>Contest:<i>  :) :)</i></h1>
+        <p>{{ contest_id }}</p>
+    </div>
 
 {% endblock %}
