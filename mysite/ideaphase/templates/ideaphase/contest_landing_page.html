@@ -7,10 +7,11 @@
     <hr>
         {% if my_contests %}
             {% for contest in my_contests %}
-                <div>
-                    <h4><b>Name: </b>{{ contest.contest_name}}<h4>
-                    <p><b>Contest Description: </b>{{ contest.contest_description }}</p>
-                    <p><b>Contest End Date: </b>{{contest.contest_enddate}}</p>
+                <div class="col-md-4">
+                    <h4><b>Name: </b>{{ contest.contest_id.contest_name }}<h4>
+                    <p><b>Contest Description: </b>{{ contest.contest_id.contest_description }}</p>
+                    <p><b>Contest End Date: </b>{{ contest.contest_id.contest_enddate }}</p>
+                    <input type="submit" value="Go to Contest >>" class="btn btn-default"/>
                 </div>
             {% endfor %}
         {% endif %}
@@ -21,18 +22,15 @@
     <hr>
         {% if other_contests %}
             {% for contest in other_contests %}
-                <div>
-                    <h4><b>Name: </b>{{ contest.contest_name}}<h4>
-                    <p><b>Contest Description: </b>{{ contest.contest_description }}</p>
-                    <p><b>Contest End Date: </b>{{contest.contest_enddate}}</p>
+                <div class="col-md-4">
+                    <h4><b>Name: </b>{{ contest.contest_id.contest_name }}<h4>
+                    <p><b>Contest Description: </b>{{ contest.contest_id.contest_description }}</p>
+                    <p><b>Contest End Date: </b>{{ contest.contest_id.contest_enddate }}</p>
+                    <input type="submit" value="Go to Contest >>" class="btn btn-default"/>
                 </div>
                 <br />
             {% endfor %}
         {% endif %}
     <br />
-    
-    {% for i in contestsx %}
-        {{ i }}
-    {% endfor %}
 
 {% endblock %}

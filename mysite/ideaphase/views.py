@@ -191,27 +191,17 @@ def contest_landing_page(request):
             #creates a dictionary of ContestInfo objects
             #to list the contests the users are in
             my_contests = ContestParticipantAssignment.objects.filter(user_id = active_user.user_id)
-            contest_increment_counter = 0
-            for contest_assignments in my_contests:
-                my_individual_contests = ContestInfo.objects.filter(contest_id = my_contests.contest_id)
-                contest_increment_counter += contest_increment_counter
-                contest_id_to_exclude
-                my_compiled_contests = {contest_increment_counter: my_individual_contest}
-
-            #creates a list of contest objects 
-            contest_id_to_exclude = [my_contests.contest_id for contest in my_contests]
-            other_contests = ContestInfo.objects.exclude(contest_id=contest_id_to_exclude)
+            other_contests = ContestParticipantAssignment.objects.exclude(user_id = active_user.user_id)
         except:
-            my_compiled_contests = ""
-            other_contests = ContestInfo.objects.all()
-            my_contests = ContestParticipantAssignment.objects.filter(user_id = active_user.user_id)
+            my_contests = ""
+            other_contests = ContestParticipantAssignment.objects.all()
 
     else:
         return HttpResponseRedirect('ideaphase/home/')
       
     return render_to_response("ideaphase/contest_landing_page.html",
                               {'ActiveUser':active_user,
-                               'my_contests':my_compiled_contests,
+                               'my_contests':my_contests,
                                'other_contests':other_contests,
                                'contestx': my_contests},
                               context_instance=RequestContext(request))
