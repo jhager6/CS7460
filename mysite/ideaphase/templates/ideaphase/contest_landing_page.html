@@ -1,0 +1,38 @@
+{% extends "ideaphase/base.html" %}
+
+{% block content %}
+    <br />
+    
+    <h3>My Contests</h3>
+    <hr>
+        {% if my_contests %}
+            {% for contest in my_contests %}
+                <div>
+                    <h4><b>Name: </b>{{ contest.contest_name}}<h4>
+                    <p><b>Contest Description: </b>{{ contest.contest_description }}</p>
+                    <p><b>Contest End Date: </b>{{contest.contest_enddate}}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+    <br />
+    
+                        
+    <h3>Other Contests</h3>
+    <hr>
+        {% if other_contests %}
+            {% for contest in other_contests %}
+                <div>
+                    <h4><b>Name: </b>{{ contest.contest_name}}<h4>
+                    <p><b>Contest Description: </b>{{ contest.contest_description }}</p>
+                    <p><b>Contest End Date: </b>{{contest.contest_enddate}}</p>
+                </div>
+                <br />
+            {% endfor %}
+        {% endif %}
+    <br />
+    
+    {% for i in contestsx %}
+        {{ i }}
+    {% endfor %}
+
+{% endblock %}

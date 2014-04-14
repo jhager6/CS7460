@@ -15,6 +15,8 @@ from django.conf import settings
 from ideaphase.models import IdeateIdea
 from ideaphase.models import IdeateIdeaComments
 from ideaphase.models import UserInfo
+from ideaphase.models import ContestInfo
+from ideaphase.models import ContestParticipantAssignment
 
 #loads the forms necessary for uploading information
 from ideaphase.forms import IdeateIdeaSubmissionForm
@@ -123,8 +125,20 @@ def home(request):
                               context_instance=RequestContext(request))
 
 def profile(request):
+    #Handles User Login Attempt
+    #Used on all views to verify login information.
+    #Due to time constraints, this is acting as our persistence layer
+    ip_address = request.get_host()
+    if get_client_ip_check(ip_address):
+
+        #grabs the active user information and loads it into the view
+        active_user = UserInfo.objects.get(ip_address=ip_address)
+
+    #code goes here
+
+        
     return render_to_response("ideaphase/profile.html",
-                              locals(),
+                              {'ActiveUser':active_user},
                               context_instance=RequestContext(request))
 
 def logout(request):
@@ -137,6 +151,114 @@ def logout(request):
     
     return render_to_response("ideaphase/logout.html",
                               locals(),
+                              context_instance=RequestContext(request))
+
+def browse_contest_ideas(request):
+    #Handles User Login Attempt
+    #Used on all views to verify login information.
+    #Due to time constraints, this is acting as our persistence layer
+    ip_address = request.get_host()
+    if get_client_ip_check(ip_address):
+
+        #grabs the active user information and loads it into the view
+        active_user = UserInfo.objects.get(ip_address=ip_address)
+
+
+    #your view code goes here
+
+
+    else:
+        return HttpResponseRedirect('ideaphase/home/')
+      
+    return render_to_response("ideaphase/browse_contest_ideas.html",
+                              {'ActiveUser':active_user},
+                              context_instance=RequestContext(request))
+
+
+
+def contest_landing_page(request):
+    #Handles User Login Attempt
+    #Used on all views to verify login information.
+    #Due to time constraints, this is acting as our persistence layer
+    ip_address = request.get_host()
+    if get_client_ip_check(ip_address):
+
+        #grabs the active user information and loads it into the view
+        active_user = UserInfo.objects.get(ip_address=ip_address)
+
+        #pulls the contest information for the user contests
+        try:
+            #creates a dictionary of ContestInfo objects
+            #to list the contests the users are in
+            my_contests = ContestParticipantAssignment.objects.filter(user_id = active_user.user_id)
+            contest_increment_counter = 0
+            for contest_assignments in my_contests:
+                my_individual_contests = ContestInfo.objects.filter(contest_id = my_contests.contest_id)
+                contest_increment_counter += contest_increment_counter
+                contest_id_to_exclude
+                my_compiled_contests = {contest_increment_counter: my_individual_contest}
+
+            #creates a list of contest objects 
+            contest_id_to_exclude = [my_contests.contest_id for contest in my_contests]
+            other_contests = ContestInfo.objects.exclude(contest_id=contest_id_to_exclude)
+        except:
+            my_compiled_contests = ""
+            other_contests = ContestInfo.objects.all()
+            my_contests = ContestParticipantAssignment.objects.filter(user_id = active_user.user_id)
+
+    else:
+        return HttpResponseRedirect('ideaphase/home/')
+      
+    return render_to_response("ideaphase/contest_landing_page.html",
+                              {'ActiveUser':active_user,
+                               'my_contests':my_compiled_contests,
+                               'other_contests':other_contests,
+                               'contestx': my_contests},
+                              context_instance=RequestContext(request))
+
+
+
+def profile_my_submissions(request):
+    #Handles User Login Attempt
+    #Used on all views to verify login information.
+    #Due to time constraints, this is acting as our persistence layer
+    ip_address = request.get_host()
+    if get_client_ip_check(ip_address):
+
+        #grabs the active user information and loads it into the view
+        active_user = UserInfo.objects.get(ip_address=ip_address)
+
+
+    #your view code goes here
+
+
+    else:
+        return HttpResponseRedirect('ideaphase/home/')
+      
+    return render_to_response("ideaphase/profile_my_submissions.html",
+                              {'ActiveUser':active_user},
+                              context_instance=RequestContext(request))
+
+
+def submit_idea(request):
+    #Handles User Login Attempt
+    #Used on all views to verify login information.
+    #Due to time constraints, this is acting as our persistence layer
+    ip_address = request.get_host()
+    if get_client_ip_check(ip_address):
+
+        #grabs the active user information and loads it into the view
+        active_user = UserInfo.objects.get(ip_address=ip_address)
+
+
+    #your view code goes here
+
+
+    else:
+        return HttpResponseRedirect('ideaphase/home/')
+      
+    return render_to_response("ideaphase/submit_idea.html",
+                              {'ActiveUser':active_user},
                               context_instance=RequestContext(request))
 
 
@@ -158,7 +280,7 @@ def logout(request):
 ##    else:
 ##        return HttpResponseRedirect('ideaphase/home/')
 ##      
-##        return render_to_response("ideaphase/template.html",
-##                              locals(),
+##    return render_to_response("ideaphase/template.html",
+##                              {'ActiveUser':active_user},
 ##                              context_instance=RequestContext(request))
 

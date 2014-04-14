@@ -7,22 +7,24 @@
 </head>
 
 <body>
-    <div class="navbar navbar-default">
-        <div class="navbar-header">
-            <h2><b>Co-Creation</b></h2>
-            <p><a href="{% url 'logout' %}">Log Out</a></p>
+    <div id="container">
+        <div class="navbar navbar-default">
+            <div class="navbar-header">
+                <h2><b>Co-Creation</b></h2>
+                <p>Hi! {{ ActiveUser.first_name}} | <a href="{% url 'logout' %}">Log Out</a></p>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="active"><a href="/">Home</a></li>
+                    <li><a href="{% url 'contest_landing_page' %}">Contests</a></li>
+                    <li><a href="{% url 'profile' %}">Profile</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="/">Home</a></li>
-                <li><a href="{% url 'list' %}">Contests</a></li>
-                <li><a href="{% url 'profile' %}">Profile</a></li>
-            </ul>
+    
+        <div id="content">
+                {% block content %}{% endblock %}
         </div>
-    </div>
-
-    <div id="content">
-        {% block content %}{% endblock %}
     </div>
 </body>
 </html>

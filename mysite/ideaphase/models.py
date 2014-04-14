@@ -36,7 +36,7 @@ class ContestInfo(models.Model):
      contestIdeate_numberAdvance = models.IntegerField(default=0) 
      contestDesign_submissionNumberAdvance = models.IntegerField(default=0)
      
-class ContestParticipantAssignments(models.Model): 
+class ContestParticipantAssignment(models.Model): 
      assignment_id = models.AutoField(primary_key=True) 
      contest_id  = models.ForeignKey(ContestInfo) 
      user_id = models.ForeignKey(UserInfo)
