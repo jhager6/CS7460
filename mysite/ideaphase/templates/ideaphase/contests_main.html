@@ -1,0 +1,39 @@
+{% extends "ideaphase/base.html" %}
+
+{% block content %}
+    <br />
+    
+    <h3>My Contests</h3>
+    <hr>
+        {% if my_contests %}
+            {% for contest in my_contests %}
+                <div class="col-md-4">
+                    <h4><b>Name: </b>{{ contest.contest_id.contest_name }}<h4>
+                    <p><b>Contest Description: </b>{{ contest.contest_id.contest_description }}</p>
+                    <p><b>Contest End Date: </b>{{ contest.contest_id.contest_enddate }}</p>
+                    <form method="POST" action="{% url 'contest_landing_page' %}">{% csrf_token %}
+                        <input type="text" value="1" id="contest_id" />
+                        <input type="submit" value="Go to Contest >>" class="btn btn-default" />
+                    </form>
+                </div>
+            {% endfor %}
+        {% endif %}
+    <br />
+    
+                        
+    <h3>Other Contests</h3>
+    <hr>
+        {% if other_contests %}
+            {% for contest in other_contests %}
+                <div class="col-md-4">
+                    <h4><b>Name: </b>{{ contest.contest_id.contest_name }}<h4>
+                    <p><b>Contest Description: </b>{{ contest.contest_id.contest_description }}</p>
+                    <p><b>Contest End Date: </b>{{ contest.contest_id.contest_enddate }}</p>
+                    <input type="submit" value="Go to Contest >>" class="btn btn-default" action="{% url 'contest_landing_page' %}"/>
+                </div>
+                <br />
+            {% endfor %}
+        {% endif %}
+    <br />
+
+{% endblock %}
