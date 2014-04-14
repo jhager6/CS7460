@@ -35,44 +35,6 @@ def get_client_ip_check(ip_address):
     except:
         return False
 
-def list(request):
-    #Handles User Login Attempt
-    #Used on all views to verify login information.
-    #Due to time constraints, this is acting as our persistence layer
-    ip_address = request.get_host()
-    if get_client_ip_check(ip_address):
-
-        #grabs the active user information and loads it into the view
-        active_user = UserInfo.objects.get(ip_address=ip_address)
-        
-    #handles the file Idea Submission uplaods
-        if request.method=='POST':
-            submission_form = IdeateIdeaSubmissionForm(request.POST, request.FILES)
-
-            #saves the submission
-            if submission_form.is_valid():
-                new_submission_store_items = IdeateIdea(ideateimage_store_location = request.FILES['ideateimage_store_location'])
-                new_submission_store_items.save()
-
-    ##        submission_save = new_submission_store_items.save(commit=False)
-    ##        submssion_save.save()
-            
-                return HttpResponseRedirect('/ideaphase/list/')
-        else:
-            submission_form = IdeateIdeaSubmissionForm() #shows empty form
-
-        #Load documents for the list page
-        submissions = IdeateIdea.objects.all()
-        
-        #posts index for html page
-        return render_to_response("ideaphase/list.html",
-                                  {'submissions':submissions, 'form':submission_form},
-                                  context_instance=RequestContext(request)
-                                  )
-
-    else:
-        return HttpResponseRedirect('ideaphase/home/')
-
 def home(request):
     #Handles User Login Attempt
     #Used on all views to verify login information.
@@ -234,23 +196,86 @@ def submit_idea(request):
     #Handles User Login Attempt
     #Used on all views to verify login information.
     #Due to time constraints, this is acting as our persistence layer
+		ip_address = request.get_host()
+		if get_client_ip_check(ip_address):
+
+			#grabs the active user information and loads it into the view
+			active_user = UserInfo.objects.get(ip_address=ip_address)
+
+			#your view code goes here
+			#Jon: Okay!
+
+			#ID of the contest you want to submit ideas to
+			contest_id = 1		#HARD CODED VALUE!!! Replace some get method
+
+
+			if request.method=='POST':
+				submission_form = IdeateIdeaSubmissionForm(request.POST, request.FILES)
+
+				#saves the submission
+				if submission_form.is_valid():
+	
+					new_submission_store_items = IdeateIdea(ideateimage_store_location = request.FILES['ideateimage_store_location'],
+ 																									ideateidea_title = request.POST['ideateidea_title'],
+																									ideateidea_description = request.POST['ideatedesc_store'],)			
+					new_submission_store_items.save()
+
+					## new_submission_store_items = IdeateIdea(ideateimage_store_location = request.FILES['ideateimage_store_location'])
+		      ##new_submission_store_items.save()
+
+					return HttpResponseRedirect('/ideaphase/browse_contest_ideas/')
+					
+				else:
+					submission_form = IdeateIdeaSubmissionForm()#shows empty form
+			else:
+				submission_form = IdeateIdeaSubmissionForm() #shows empty form
+	
+		#Person is not logged in
+		else:
+			return HttpResponseRedirect('ideaphase/home/')
+      
+		return render_to_response("ideaphase/submit_idea.html",
+                              {'ActiveUser':active_user},
+                              context_instance=RequestContext(request))
+
+
+def list(request):
+	#Handles User Login Attempt
+	#Used on all views to verify login information.
+    #Due to time constraints, this is acting as our persistence layer
     ip_address = request.get_host()
     if get_client_ip_check(ip_address):
 
         #grabs the active user information and loads it into the view
         active_user = UserInfo.objects.get(ip_address=ip_address)
+        
+    #handles the file Idea Submission uplaods
+        if request.method=='POST':
+            submission_form = IdeateIdeaSubmissionForm(request.POST, request.FILES)
 
+            #saves the submission
+            if submission_form.is_valid():
+                new_submission_store_items = IdeateIdea(ideateimage_store_location = request.FILES['ideateimage_store_location'])
+                new_submission_store_items.save()
 
-    #your view code goes here
+    ##        submission_save = new_submission_store_items.save(commit=False)
+    ##        submssion_save.save()
+            
+                return HttpResponseRedirect('/ideaphase/list/')
+        else:
+            submission_form = IdeateIdeaSubmissionForm() #shows empty form
 
+        #Load documents for the list page
+        submissions = IdeateIdea.objects.all()
+        
+        #posts index for html page
+        return render_to_response("ideaphase/list.html",
+                                  {'submissions':submissions, 'form':submission_form},
+                                  context_instance=RequestContext(request)
+                                  )
 
     else:
         return HttpResponseRedirect('ideaphase/home/')
-      
-    return render_to_response("ideaphase/submit_idea.html",
-                              {'ActiveUser':active_user},
-                              context_instance=RequestContext(request))
-
 
 ## view template below:
 ##def view_template(request):
