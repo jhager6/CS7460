@@ -36,7 +36,7 @@ def get_client_ip_check(ip_address):
     except:
         return False
     
-
+CONTEST_ID = '1'
 
 def list(request):
     #Handles User Login Attempt
@@ -137,7 +137,7 @@ def profile(request):
         #grabs the active user information and loads it into the view
         active_user = UserInfo.objects.get(ip_address=ip_address)
 
-    #code goes here
+        #code goes here
 
         
     return render_to_response("ideaphase/profile.html",
@@ -192,19 +192,19 @@ def contest_main(request):
         #pulls the contest information for the user contests
         try:
             #creates a dictionary of ContestInfo objects
-            #to list the contests the users are in
+            #to list the contests the user is in/ not in
             my_contests = ContestParticipantAssignment.objects.filter(user_id = active_user.user_id)
-            other_contests = ContestParticipantAssignment.objects.exclude(user_id = active_user.user_id)
+            #creates a list of contest_id's the contests the user is associated with
+            exclude_list = [1, 2]
+##            for contest in my_contests:
+##                exclude_list += contest.contest_id.contest_id
+
+            #creates a list of all the other contests
+            other_contests = ContestInfo.objects.exclude(contest_id = exclude_list)
         except:
             my_contests = ""
-            other_contests = ContestParticipantAssignment.objects.all()
+            other_contests = ContestInfo.objects.all()
 
-        #if a button is clicked, it posts the variable
-        if request.method=='POST':
-            contest_click = request.POST['contest_id']
-            return render_to_response('ideaphase/contest_landing_page.html',
-                                      {'contest_id': contest_click },
-                                      context_instance=RequestContext(request))
 
     else:
         return HttpResponseRedirect('ideaphase/home/')
@@ -270,6 +270,13 @@ def contest_landing_page(request):
 
         #grabs the active user information and loads it into the view
         active_user = UserInfo.objects.get(ip_address=ip_address)
+
+        #if a button is clicked on contest main, it posts the variable
+        if request.method=='POST':
+            contest_click = request.POST['contest_id']
+            return render_to_response('ideaphase/contest_landing_page.html',
+                                      {'contest_id': contest_click },
+                                      context_instance=RequestContext(request))
 
 
 
