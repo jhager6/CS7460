@@ -31,16 +31,17 @@
             <div class="col-md-4">
                 <form method="POST">
                     {% csrf_token %}
-                    <input type="radio" name="vote" value="Yes"> Up Vote <br />
-                    <input type="radio" name="vote" value="No"> Down Vote <br />
+                    <input type="radio" name="vote" value="Y"> Up Vote <br />
+                    <input type="radio" name="vote" value="N"> Down Vote <br />
                     <textarea rows="4" cols="50" name="IdeaComment"></textarea> <br />
                     
                     <!-- Used to track important data for the model function -->
                     <input type="hidden" name="contest_id" value="{{ contest_id }}" />
                     <input type="hidden" name="vote_submit" value="2" />
+                    <input type="hidden" name="first_nav" value="1" />
                     <input type="hidden" name="ideate_id" value="{{ idea.ideate_id }}" />
                     
-                    <input type="submit" value="Submit Vote and Comment" class="btn btn-default" />
+                    <input type="submit" value="Submit Vote and Comment" class="btn btn-default" /> Vote Count: {{ vote_count }}
                 </form>
             </div>
         </div>

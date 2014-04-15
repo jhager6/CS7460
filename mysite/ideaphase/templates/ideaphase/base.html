@@ -3,14 +3,14 @@
 <head>
     {% load staticfiles %}
     <link rel="stylesheet" href="{% static "bootstrap.css" %}" type="text/css" />
-    <title>{% block title %}My amazing site{% endblock %}</title>
+    <title>{% block title %}ID8idea{% endblock %}</title>
 </head>
 
 <body>
     <div class="container">
         <div class="navbar navbar-default">
             <div class="navbar-header">
-                <h2><b>Co-Creation</b></h2>
+                <h2><b><i>ID8idea</i></b></h2>
                 <p>Hi! {{ ActiveUser.first_name}} | <a href="{% url 'logout' %}">Log Out</a></p>
             </div>
             <div class="navbar-collapse collapse">

@@ -27,6 +27,7 @@ class ContestInfo(models.Model):
      contest_enddate = models.DateTimeField() 
      contestIdeate_numberAdvance = models.IntegerField(default=0) 
      contestDesign_submissionNumberAdvance = models.IntegerField(default=0)
+     #contest_image_store_location = models.FileField(upload_to='documents/%Y/%m/%d')
      
 class ContestParticipantAssignment(models.Model): 
      assignment_id = models.AutoField(primary_key=True) 
@@ -49,20 +50,20 @@ class IdeateIdea(models.Model):
      ideateidea_description = models.CharField(max_length=500)
      
 class IdeateIdeaComments(models.Model): 
-     comment_id = models.AutoField(primary_key=True) 
+     comment_id = models.AutoField(primary_key=True)
      ideate_id = models.ForeignKey(IdeateIdea) 
      comment_information = models.CharField(max_length=250) 
      user_id = models.ForeignKey(UserInfo) 
-     ideateidea_commentdate = models.DateTimeField(auto_now_add=True)
+     ideateidea_commentdate = models.DateTimeField(auto_now_add=True, blank=True)
  
 class IdeateIdeaVote(models.Model): 
-     ideatevote_id = models.AutoField(primary_key=True) 
+     ideatevote_id = models.AutoField(primary_key=True)
      user_id = models.ForeignKey(UserInfo) 
      ideate_id = models.ForeignKey(IdeateIdea) 
      ideateidea_date = models.DateTimeField(auto_now_add=True, blank=True) 
      IDEATE_IDEA__VOTE = ( 
-           ('Y', 'Yes'), 
+           ('Y','Yes'), 
            ('N', 'No'), 
           ) 
-     ideate_vote = models.CharField(max_length=1, choices=IDEATE_IDEA__VOTE)
+     ideate_vote = models.CharField(max_length=3, choices=IDEATE_IDEA__VOTE)
 

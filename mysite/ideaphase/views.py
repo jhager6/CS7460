@@ -23,6 +23,8 @@ from ideaphase.models import IdeateIdeaComments, IdeateIdeaVote
 from ideaphase.forms import IdeateIdeaSubmissionForm, VoteForm
 from ideaphase.forms import SystemLogIn
 
+import sys, traceback
+
 #gets the user's ip address
 def get_ip_address(request):
     ip_address = request.META.get['REMOTE_ADDR']
@@ -36,6 +38,15 @@ def get_client_ip_check(ip_address):
         return True
     except:
         return False
+
+def counter(object):
+    try:
+        counter = 0
+        for i in object:
+            counter += 1
+        return counter
+    except:
+        return 0
 
 def list(request):
     #Handles User Login Attempt
@@ -240,10 +251,15 @@ def profile_my_submissions(request):
     if get_client_ip_check(ip_address):
 
         #grabs the active user information and loads it into the view
-        active_user = UserInfo.objects.get(ip_address=ip_address)
-
-
-    #your view code goes here
+        contest_id = 1
+##        contest_info = ContestInfo(contest_id=contest_id)
+##        ideate_idea = 5
+##        ideate_idea_info = IdeateIdea(ideate_id=ideate_id)
+##        
+##        active_user = UserInfo.objects.get(ip_address=ip_address)
+##        votes = IdeateIdeaVote(
+##        
+        
 
 
     else:
@@ -278,6 +294,7 @@ def submit_idea(request):
 
                     contest_click = ContestInfo.objects.get(contest_id = contest_id)
 
+
                     #if the user assignment does not exist, a new assignment is created
                     #if the user assignment exists, then it sets the user_contest_assignment_info variable
                     try:
@@ -299,17 +316,20 @@ def submit_idea(request):
                                                                 ideateidea_title = request.POST['ideateidea_title'],
                                                                 user_id = user_contest_assignment_info.user_id,
                                                                 contest_id = user_contest_assignment_info.contest_id,
-                                                                ideateidea_description = 'description save error')
-                        #new_submission_store_items.ideateimage_store_location = request.FILES['ideateimage_store_location']
-                        #new_submission_store_items.ideateidea_title = request.POST['ideateidea_title']
-                        #new_submission_store_items.user_id = active_user.user_id
-                        #new_submission_store_items.contest_id = contest_id
-                        #new_submission_store_items.ideateidea_description = 'description save error' ###request.POST['ideateidea_description']                                                                                                                                                              ideateidea_title = request.POST['ideateidea_title'],                                                                                                                                                                ideateidea_description = request.POST['ideatedesc_store'],)			
-
+                                                                ideateidea_description = request.POST['ideateidea_description'])
                         new_submission_store_items.save()
 
 
-                        return HttpResponseRedirect('/ideaphase/contest_landing_page/')
+                        #creates an object to pass with ideas to display for the current contest
+                        ideate_ideas_to_display = IdeateIdea.objects.filter(contest_id = contest_click)
+
+                        return render_to_response('ideaphase/contest_landing_page.html',
+                                      {'ActiveUser':active_user,
+                                        'contest_id': contest_id,
+                                        'contest': user_contest_assignment_info.contest_id,
+                                        'ideas': ideate_ideas_to_display},
+                                      context_instance=RequestContext(request)
+                                                  )
                                 
                     else:
                         first_nav = 0
@@ -351,46 +371,106 @@ def contest_landing_page(request):
             contest_click = request.POST['contest_id']
             contest_id = ContestInfo.objects.get(contest_id = contest_click)
             ideate_ideas_to_display = IdeateIdea.objects.filter(contest_id = contest_id)
-
-
-            TheFinalTruth = request.POST['vote_submit']
+            
             post_value = request.POST['vote_submit']
-##            if post_value==2:
-##                try:
-                #initializes post data
+
+            #submits the vote
             try:
                 idea_vote = request.POST['vote']
-                ideate_id = request.POST['ideate_id']
-        
-                #creates and updates a IdeateIdeaVote object
-                idea_vote_entry = IdeateIdeaVote(idea_vote = request.POST['vote'],
-                                             user_id = active_user,
-                                             contest_id = contest_id,
-                                             ideate_id = request.POST['ideate_id'])
-                
-            
-                #saves the vote
-                if idea_vote_entry.is_valid():
-                    idea_vote_entry.save()
-                    TheFinalTruth = "WIN!"
-                else:
-                    TheFinalTruth = "EPIC FAIL!!!"
+                ideate_id_instance = IdeateIdea(ideate_id = request.POST['ideate_id'])
+                try:
+                    #creates and updates a IdeateIdeaVote object
+                    
+                    idea_vote_entry = IdeateIdeaVote(ideate_vote = request.POST['vote'],
+                                                 user_id = active_user,
+                                                 ideate_id = ideate_id_instance)
+
+                    try:
+                        #saves the vote
+                        idea_vote_entry.save()
+                        print '-'*60
+                        print "WIN!"
+                        print '-'*60
+                    except:
+                        TheFinalTruth = "failed to save"
+                        print '-'*60
+                        traceback.print_exc(file=sys.stdout)
+                        print '-'*60
+                        print contest_id.__dict__
+                        print '-'*60
+                        print idea_vote_entry.is_valid()
+
+                except:
+                    print "the IdeateIdeaVote object creation had an issue"
+                    print '-'*60
+                    traceback.print_exc(file=sys.stdout)
+                    print '-'*60
 
             except:
-                import sys
-                TheFinalTruth = 'fail of the post try'
-            
-
-                
-            
+                TheFinalTruth = "failed because of first entry no POST['vote']"
 
 
+            #submits the idea comments
+            try:
+                idea_vote = request.POST['IdeaComment']
+                ideate_id_instance = IdeateIdea(ideate_id = request.POST['ideate_id'])
+                try:
+                    #creates and updates a IdeateIdeaVote object
+                    
+                    idea_vote_entry = IdeateIdeaComments(comment_information = request.POST['IdeaComment'],
+                                                 user_id = active_user,
+                                                 ideate_id = ideate_id_instance)
+
+                    try:
+                        #saves the vote
+                        idea_vote_entry.save()
+                        print '-'*60
+                        print 'WIN!'
+                        print '-'*60
+                    except:
+                        print "failed to save IdeateIdeaComments"
+                        print '-'*60
+                        traceback.print_exc(file=sys.stdout)
+                        print '-'*60
+                        print contest_id.__dict__
+                        print '-'*60
+                        print idea_vote_entry.is_valid()
+
+                except:
+                    print 'the IdeateIdeaComments object creation had an issue'
+                    print '-'*60
+                    traceback.print_exc(file=sys.stdout)
+                    print '-'*60
+
+            except:
+                print '-'*60
+                print """this is the first view to the ideate idea interactions /n
+                        on the contest_landing_page screen"""
+                print '-'*60
+
+
+##            try:
+##                #counts the total number of votes
+##                ideate_idea_votes = IdeateIdea.objects.filter(ideate_id=request.POST['ideate_id'])
+##                vote_count = counter(ideate_idea_votes)
+##            except:
+##                print 'issue counting'
+##                print '-'*60
+##                traceback.print_exc(file=sys.stdout)
+##                print '-'*60
+
+            try:
+                x = vote_count
+            except:
+                vote_count = 0
             
+            #submits the votes/comments if applicable.
             return render_to_response('ideaphase/contest_landing_page.html',
                                       {'contest_id': contest_click,
                                        'ideas': ideate_ideas_to_display,
                                        'contest': contest_id,
-                                       'TheFinalTruth': TheFinalTruth},
+                                       'vote_count': vote_count
+                                       },
                                       context_instance=RequestContext(request))
 
 
