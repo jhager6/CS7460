@@ -1,7 +1,27 @@
 {% extends "ideaphase/base.html" %}
 
 {% block content %}
-   My Current Contests
+<h3> User Information </h3>
+   <p><b>Firstname:</b> {{ ActiveUser.first_name }}</p>
+   <p><b>Lastname:</b> {{ ActiveUser.last_name }}</p>
+   <p><b>Username:</b> {{ ActiveUser.user_name }}</p>
+
+  <h3> My Current Contests </h3>
     <hr>
-    {{ ActiveUser.user_id }} {{ ActiveUser.first_name }} {{ ActiveUser.last_name }} {{ ActiveUser.user_name }} {{ ActiveUser.password }}
+        {% if CurrentContest %}
+            {% for contest in CurrentContest %}
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <h4><b>Name: </b>{{ contest.contest_id.contest_name }}<h4>
+                        <p><b>Contest Description: </b>{{ contest.contest_id.contest_description }}</p>
+                        <p><b>Contest End Date: </b>{{ contest.contest_id.contest_enddate }}</p>
+                        <form method="POST" action="{% url 'contest_landing_page' %}">{% csrf_token %}
+                            <input type="hidden" value= "{{ contest.contest_id.contest_id }}" name="contest_id" />
+                            <input type="submit" value="Go to Contest >>" class="btn btn-default" />
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    <br />
 {% endblock %}

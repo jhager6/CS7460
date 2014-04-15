@@ -135,12 +135,19 @@ def profile(request):
 
         #grabs the active user information and loads it into the view
         active_user = UserInfo.objects.get(ip_address=ip_address)
+        
+        #contest that user is currenntly assigned to 
+        current_contest = ContestParticipantAssignment.objects.filter(user_id = active_user.user_id)
 
-        #code goes here
+        #gets all the active contest in the system
+        #now = datetime.datetime.now()
+        #current_contest = ContestInfo.objects.filter(contest_enddate >= now).filter(contest_startdate <= now)
 
+    else:
+        return HttpResponseRedirect('ideaphase/home/')
         
     return render_to_response("ideaphase/profile.html",
-                              {'ActiveUser':active_user},
+                              {'ActiveUser':active_user, 'CurrentContest':current_contest },
                               context_instance=RequestContext(request))
 
 def logout(request):
