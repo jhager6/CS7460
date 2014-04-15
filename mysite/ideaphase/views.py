@@ -17,9 +17,10 @@ from ideaphase.models import IdeateIdeaComments
 from ideaphase.models import UserInfo
 from ideaphase.models import ContestInfo
 from ideaphase.models import ContestParticipantAssignment
+from ideaphase.models import IdeateIdeaComments, IdeateIdeaVote
 
 #loads the forms necessary for uploading information
-from ideaphase.forms import IdeateIdeaSubmissionForm
+from ideaphase.forms import IdeateIdeaSubmissionForm, VoteForm
 from ideaphase.forms import SystemLogIn
 
 #gets the user's ip address
@@ -292,11 +293,8 @@ def submit_idea(request):
                         user_contest_assignment_info = sign_up_user
 
 
-
-                    #saves the submission
-                    val = submission_form.is_valid()
                     #if submission_form.is_valid():
-                    if first_nav == 0:
+                    if submission_form.is_valid():
                         new_submission_store_items = IdeateIdea(ideateimage_store_location = request.FILES['ideateimage_store_location'],
                                                                 ideateidea_title = request.POST['ideateidea_title'],
                                                                 user_id = user_contest_assignment_info.user_id,
@@ -333,9 +331,7 @@ def submit_idea(request):
 	return render_to_response("ideaphase/submit_idea.html",
                               {'ActiveUser':active_user,
                                'form': submission_form,
-                               'contest_id': contest_id,
-                               'val': val,
-                               'first_nav':first_nav},
+                               'contest_id': contest_id},
                               context_instance=RequestContext(request))
 
 
@@ -357,12 +353,44 @@ def contest_landing_page(request):
             ideate_ideas_to_display = IdeateIdea.objects.filter(contest_id = contest_id)
 
 
+            TheFinalTruth = request.POST['vote_submit']
+            post_value = request.POST['vote_submit']
+##            if post_value==2:
+##                try:
+                #initializes post data
+            try:
+                idea_vote = request.POST['vote']
+                ideate_id = request.POST['ideate_id']
+        
+                #creates and updates a IdeateIdeaVote object
+                idea_vote_entry = IdeateIdeaVote(idea_vote = request.POST['vote'],
+                                             user_id = active_user,
+                                             contest_id = contest_id,
+                                             ideate_id = request.POST['ideate_id'])
+                
+            
+                #saves the vote
+                if idea_vote_entry.is_valid():
+                    idea_vote_entry.save()
+                    TheFinalTruth = "WIN!"
+                else:
+                    TheFinalTruth = "EPIC FAIL!!!"
+
+            except:
+                import sys
+                TheFinalTruth = 'fail of the post try'
+            
+
+                
+            
+
 
             
             return render_to_response('ideaphase/contest_landing_page.html',
                                       {'contest_id': contest_click,
                                        'ideas': ideate_ideas_to_display,
-                                       'contest': contest_id},
+                                       'contest': contest_id,
+                                       'TheFinalTruth': TheFinalTruth},
                                       context_instance=RequestContext(request))
 
 

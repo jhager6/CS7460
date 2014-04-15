@@ -23,8 +23,8 @@ class ContestInfo(models.Model):
      contest_id = models.AutoField(primary_key=True) 
      contest_name = models.CharField(max_length=100) 
      contest_description = models.CharField(max_length=100) 
-     contest_startdate = models.DateTimeField('Contest start date') 
-     contest_enddate = models.DateTimeField('Contest end date') 
+     contest_startdate = models.DateTimeField() 
+     contest_enddate = models.DateTimeField() 
      contestIdeate_numberAdvance = models.IntegerField(default=0) 
      contestDesign_submissionNumberAdvance = models.IntegerField(default=0)
      
@@ -35,8 +35,8 @@ class ContestParticipantAssignment(models.Model):
      
 class ContestStillOpen(models.Model): 
      contest_id = models.ForeignKey(ContestInfo) 
-     contest_enddate = models.DateTimeField('Contest end date') 
-     ideatephase_enddate = models.DateTimeField('IdeatePhase end date') 
+     contest_enddate = models.DateTimeField() 
+     ideatephase_enddate = models.DateTimeField() 
      contestIdeate_numberAdvance = models.IntegerField(default=0)
      
 class IdeateIdea(models.Model): 
@@ -45,7 +45,7 @@ class IdeateIdea(models.Model):
      user_id = models.ForeignKey(UserInfo) 
      contest_id = models.ForeignKey(ContestInfo) 
      ideateimage_store_location = models.FileField(upload_to='documents/%Y/%m/%d') 
-     ideateidea_date = models.DateTimeField('Ideate Idea Date', auto_now_add=True)
+     ideateidea_date = models.DateTimeField(auto_now_add=True, blank=True)
      ideateidea_description = models.CharField(max_length=500)
      
 class IdeateIdeaComments(models.Model): 
@@ -53,13 +53,13 @@ class IdeateIdeaComments(models.Model):
      ideate_id = models.ForeignKey(IdeateIdea) 
      comment_information = models.CharField(max_length=250) 
      user_id = models.ForeignKey(UserInfo) 
-     ideateidea_commentdate = models.DateTimeField('Ideateidea Comment date')
+     ideateidea_commentdate = models.DateTimeField(auto_now_add=True)
  
 class IdeateIdeaVote(models.Model): 
      ideatevote_id = models.AutoField(primary_key=True) 
      user_id = models.ForeignKey(UserInfo) 
      ideate_id = models.ForeignKey(IdeateIdea) 
-     ideateidea_date = models.DateTimeField('Ideate idea date') 
+     ideateidea_date = models.DateTimeField(auto_now_add=True, blank=True) 
      IDEATE_IDEA__VOTE = ( 
            ('Y', 'Yes'), 
            ('N', 'No'), 

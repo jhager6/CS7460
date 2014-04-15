@@ -1,4 +1,5 @@
 from django import forms
+from ideaphase.models import IdeateIdeaVote
 
 #creates the idea submission form
 class IdeateIdeaSubmissionForm(forms.Form):
@@ -36,5 +37,9 @@ class SystemLogIn(forms.Form):
         password = forms.CharField(
                 label='Password'
                 )
+        
+class VoteForm(forms.Form):
+        class Meta:
+                model = IdeateIdeaVote
 
     

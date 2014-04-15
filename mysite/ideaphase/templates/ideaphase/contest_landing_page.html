@@ -7,20 +7,21 @@
         <p>{{ contest.contest_description }}</p>
 
                 <form method="POST" action="{% url 'submit_idea' %}">{% csrf_token %}
+                    <!-- Used to track important data for the model function -->
                     <input type="hidden" name="contest_id" value="{{ contest_id }}" />
                     <input type="hidden" name="first_nav" value="1" />
+                    <input type="hidden" name="vote_submit" value="1" />
                     <input type="submit" value="Sign up and Submit Idea >>" class="btn btn-default" />
                 </form>
         </div>
 
-        <br />
         <h1>Top Ideas Submitted</h1>
         <hr>
         
         {% for idea in ideas %}
-        <div class="col-md-12" id="col-md-12 idea-review">
+        <div class="col-md-12" id="col-md-12 idea-review" style="border:1px solid grey; margin: 2px;">
             <div class="col-md-4">
-                <h3>{{ idea.ideateidea_title  }}</h3><br />
+                <h3>{{ idea.ideateidea_title  }}</h3>
                 <p>{{ idea.ideateidea }}</p>
                 <p>{{ idea.ideateidea_description }}</p>
             </div>  
@@ -28,18 +29,24 @@
                 <h3> <img src="..{{ idea.ideateimage_store_location.url }}"><br />        
             </div> 
             <div class="col-md-4">
-                <form method="POST">{% csrf_token %}
-                    <input type="radio" name="vote" value="Up Vote"> Up Vote <br />
-                    <input type="radio" name="vote" value="Up Vote"> Down Vote <br />
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="radio" name="vote" value="Yes"> Up Vote <br />
+                    <input type="radio" name="vote" value="No"> Down Vote <br />
                     <textarea rows="4" cols="50" name="IdeaComment"></textarea> <br />
+                    
+                    <!-- Used to track important data for the model function -->
+                    <input type="hidden" name="contest_id" value="{{ contest_id }}" />
+                    <input type="hidden" name="vote_submit" value="2" />
+                    <input type="hidden" name="ideate_id" value="{{ idea.ideate_id }}" />
                     
                     <input type="submit" value="Submit Vote and Comment" class="btn btn-default" />
                 </form>
-            </div>         
-            <div class="col-md-12">
-                Contributed by: {{ idea.user_id.username }} on {{ idea.ideateidea_date }}
             </div>
         </div>
+        <div class="col-md-12" style="font-size:10px;">
+            <i>Contributed by: {{ idea.user_id.user_name }} on {{ idea.ideateidea_date }}</i>
+        </div>
         {% endfor %}
-        
+            {{ TheFinalTruth  }}
 {% endblock %}
