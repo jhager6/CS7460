@@ -20,6 +20,9 @@ urlpatterns = patterns('',
     url(r'^profile_my_submissions/', 'ideaphase.views.profile_my_submissions'),
     url(r'^submit_idea/', 'ideaphase.views.submit_idea'),
     url(r'^contest_main/', 'ideaphase.views.contest_main'),
+    url(r'^images/(?P<path>.*)$','django.views.static.serve')
+
+
 
     #(r'^admin/', RedirectView.as_view(url=os.path.join(BASE_DIR, '/mysite/admin')),
 

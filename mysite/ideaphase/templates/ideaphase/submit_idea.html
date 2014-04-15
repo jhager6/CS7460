@@ -2,6 +2,20 @@
 
 {% block content %}
    
-    Your content goes here
+    <form method="post" enctype="multipart/form-data">{% csrf_token %}
+        {{ form.ideateidea_title.label }} <br />
+        {{ form.ideateidea_title }} <br />
+        {{ form.ideateimage_store_location.label }} <br />
+        {{ form.ideateimage_store_location }} <br />
+        {{ form.ideateidea_description.label }} <br />
+        {{ form.ideateidea_description }} <br />
+        
+        <input type="hidden" name="contest_id" value="{{ contest_id }}" />
+        <input type="hidden" name="first_nav" value="0" />
+        <input type="submit" value="Post Idea" class="btn btn-default" />
+        {{ contest_id }}
+        {{ val }}
+        {{ first_nav }}
+    </form>
 
 {% endblock %}

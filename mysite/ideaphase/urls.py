@@ -20,9 +20,10 @@ urlpatterns = patterns('',
     url(r'^profile_my_submissions/$', 'ideaphase.views.profile_my_submissions', name='profile_my_submissions'),
     url(r'^submit_idea/$', 'ideaphase.views.submit_idea', name='submit_idea'),
     url(r'^contest_main/$', 'ideaphase.views.contest_main', name='contest_main'),
+    url(r'^document/(?P<path>.*)$', 'django.views.static.serve', name='documents')
     # url(r'^blog/', include('blog.urls')),
     
 )
 
 urlpatterns += static (settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

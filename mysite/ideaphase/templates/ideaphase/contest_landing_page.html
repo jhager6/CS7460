@@ -3,8 +3,43 @@
 {% block content %}
 
     <div class="jumbotron">
-        <h1>Contest:<i>  :) :)</i></h1>
-        <p>{{ contest_id }}</p>
-    </div>
+        <h2>Contest:<i>  {{ contest.contest_name }}</i></h2>
+        <p>{{ contest.contest_description }}</p>
 
+                <form method="POST" action="{% url 'submit_idea' %}">{% csrf_token %}
+                    <input type="hidden" name="contest_id" value="{{ contest_id }}" />
+                    <input type="hidden" name="first_nav" value="1" />
+                    <input type="submit" value="Sign up and Submit Idea >>" class="btn btn-default" />
+                </form>
+        </div>
+
+        <br />
+        <h1>Top Ideas Submitted</h1>
+        <hr>
+        
+        {% for idea in ideas %}
+        <div class="col-md-12" id="col-md-12 idea-review">
+            <div class="col-md-4">
+                <h3>{{ idea.ideateidea_title  }}</h3><br />
+                <p>{{ idea.ideateidea }}</p>
+                <p>{{ idea.ideateidea_description }}</p>
+            </div>  
+            <div class="col-md-4">
+                <h3> <img src="..{{ idea.ideateimage_store_location.url }}"><br />        
+            </div> 
+            <div class="col-md-4">
+                <form method="POST">{% csrf_token %}
+                    <input type="radio" name="vote" value="Up Vote"> Up Vote <br />
+                    <input type="radio" name="vote" value="Up Vote"> Down Vote <br />
+                    <textarea rows="4" cols="50" name="IdeaComment"></textarea> <br />
+                    
+                    <input type="submit" value="Submit Vote and Comment" class="btn btn-default" />
+                </form>
+            </div>         
+            <div class="col-md-12">
+                Contributed by: {{ idea.user_id.username }} on {{ idea.ideateidea_date }}
+            </div>
+        </div>
+        {% endfor %}
+        
 {% endblock %}

@@ -18,14 +18,6 @@ class UserInfo(models.Model):
                return True
           else:
                return False
-
-#used for multiuser functionality.
-#better to use the AUTH functionality built in
-##class ActiveUserQuery(models.Model):
-##     user_id = models.ForeignKey(UserInfo)
-##     user_name = models.ForeignKey(UserInfo)
-##     ip_address = models.TextField()
-          
      
 class ContestInfo(models.Model): 
      contest_id = models.AutoField(primary_key=True) 
@@ -53,7 +45,7 @@ class IdeateIdea(models.Model):
      user_id = models.ForeignKey(UserInfo) 
      contest_id = models.ForeignKey(ContestInfo) 
      ideateimage_store_location = models.FileField(upload_to='documents/%Y/%m/%d') 
-     ideateidea_date = models.DateTimeField('Ideate Idea Date')
+     ideateidea_date = models.DateTimeField('Ideate Idea Date', auto_now_add=True)
      ideateidea_description = models.CharField(max_length=500)
      
 class IdeateIdeaComments(models.Model): 

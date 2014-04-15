@@ -35,11 +35,7 @@ def get_client_ip_check(ip_address):
         return True
     except:
         return False
-    
-CONTEST_ID = '1'
 
-<<<<<<< HEAD
-=======
 def list(request):
     #Handles User Login Attempt
     #Used on all views to verify login information.
@@ -78,7 +74,7 @@ def list(request):
     else:
         return HttpResponseRedirect('ideaphase/home/')
 
->>>>>>> b55c111a54f56afa6c6443d54ae983f6f25901ef
+
 def home(request):
     #Handles User Login Attempt
     #Used on all views to verify login information.
@@ -197,13 +193,21 @@ def contest_main(request):
             #creates a dictionary of ContestInfo objects
             #to list the contests the user is in/ not in
             my_contests = ContestParticipantAssignment.objects.filter(user_id = active_user.user_id)
-            #creates a list of contest_id's the contests the user is associated with
-            exclude_list = [1, 2]
-##            for contest in my_contests:
-##                exclude_list += contest.contest_id.contest_id
 
-            #creates a list of all the other contests
-            other_contests = ContestInfo.objects.exclude(contest_id = exclude_list)
+            #creates a list of ContestInfo Objects to differentiate between current user contests and other contests
+            #not signed up for.
+            if not my_contests:
+                other_contests = ContestInfo.objects.all()
+            else:
+                all_contests = ContestInfo.objects.all()
+                other_contests=[]
+                for my_contest in my_contests:
+                    for contest in all_contests:
+                        if contest.contest_id == my_contest.contest_id.contest_id:
+                            other_contests = other_contests
+                        else:
+                            other_contests.append(contest)
+
         except:
             my_contests = ""
             other_contests = ContestInfo.objects.all()
@@ -215,8 +219,7 @@ def contest_main(request):
     return render_to_response("ideaphase/contests_main.html",
                               {'ActiveUser':active_user,
                                'my_contests':my_contests,
-                               'other_contests':other_contests,
-                               'contestx': my_contests},
+                               'other_contests':other_contests},
                               context_instance=RequestContext(request))
 
 
@@ -247,92 +250,88 @@ def submit_idea(request):
     #Handles User Login Attempt
     #Used on all views to verify login information.
     #Due to time constraints, this is acting as our persistence layer
-		ip_address = request.get_host()
-		if get_client_ip_check(ip_address):
+        ip_address = request.get_host()
+        if get_client_ip_check(ip_address):
 
-			#grabs the active user information and loads it into the view
-			active_user = UserInfo.objects.get(ip_address=ip_address)
+            #grabs the active user information and loads it into the view
+            active_user = UserInfo.objects.get(ip_address=ip_address)
 
-			#your view code goes here
-			#Jon: Okay!
+            #your view code goes here
+            #Jon: Okay!
 
-			#ID of the contest you want to submit ideas to
-			contest_id = 1		#HARD CODED VALUE!!! Replace some get method
-
-
-			if request.method=='POST':
-				submission_form = IdeateIdeaSubmissionForm(request.POST, request.FILES)
-
-				#saves the submission
-				if submission_form.is_valid():
-	
-					new_submission_store_items = IdeateIdea(ideateimage_store_location = request.FILES['ideateimage_store_location'],
- 																									ideateidea_title = request.POST['ideateidea_title'],
-																									ideateidea_description = request.POST['ideatedesc_store'],)			
-					new_submission_store_items.save()
-
-					## new_submission_store_items = IdeateIdea(ideateimage_store_location = request.FILES['ideateimage_store_location'])
-		      ##new_submission_store_items.save()
-
-					return HttpResponseRedirect('/ideaphase/browse_contest_ideas/')
-					
-				else:
-					submission_form = IdeateIdeaSubmissionForm()#shows empty form
-			else:
-				submission_form = IdeateIdeaSubmissionForm() #shows empty form
-	
-		#Person is not logged in
-		else:
-			return HttpResponseRedirect('ideaphase/home/')
-      
-		return render_to_response("ideaphase/submit_idea.html",
-                              {'ActiveUser':active_user},
-                              context_instance=RequestContext(request))
-
-
-def list(request):
-	#Handles User Login Attempt
-	#Used on all views to verify login information.
-    #Due to time constraints, this is acting as our persistence layer
-    ip_address = request.get_host()
-    if get_client_ip_check(ip_address):
-
-        #grabs the active user information and loads it into the view
-        active_user = UserInfo.objects.get(ip_address=ip_address)
-        
-    #handles the file Idea Submission uplaods
-        if request.method=='POST':
-            submission_form = IdeateIdeaSubmissionForm(request.POST, request.FILES)
-
-            #saves the submission
-            if submission_form.is_valid():
-                new_submission_store_items = IdeateIdea(ideateimage_store_location = request.FILES['ideateimage_store_location'])
-                new_submission_store_items.save()
-
-    ##        submission_save = new_submission_store_items.save(commit=False)
-    ##        submssion_save.save()
+            #ID of the contest you want to submit ideas to
             
-                return HttpResponseRedirect('/ideaphase/list/')
-        else:
-            submission_form = IdeateIdeaSubmissionForm() #shows empty form
 
-        #Load documents for the list page
-        submissions = IdeateIdea.objects.all()
-        
-        #posts index for html page
-        return render_to_response("ideaphase/list.html",
-                                  {'submissions':submissions, 'form':submission_form},
-                                  context_instance=RequestContext(request)
-                                  )
 
-    else:
-        return HttpResponseRedirect('ideaphase/home/')
-<<<<<<< HEAD
-=======
+            if request.method=='POST':
+                    submission_form = IdeateIdeaSubmissionForm(request.POST, request.FILES)
+                    contest_id = request.POST['contest_id']
+                    first_nav = request.POST['first_nav']
+
+                    contest_click = ContestInfo.objects.get(contest_id = contest_id)
+
+                    #if the user assignment does not exist, a new assignment is created
+                    #if the user assignment exists, then it sets the user_contest_assignment_info variable
+                    try:
+                        user_contest_assignment_info = ContestParticipantAssignment.objects.get(user_id = active_user.user_id, contest_id=contest_click)
+                    except:
+                        #assigns the user to the current contest if the clicked the 'sign up and submit' button
+                        sign_up_user = ContestParticipantAssignment()
+                        sign_up_user.contest_id = contest_click
+                        sign_up_user.user_id = active_user
+                        sign_up_user.save()
+
+                        #assigns the user to user_contest_assignment_info variable
+                        user_contest_assignment_info = sign_up_user
+
+
+
+                    #saves the submission
+                    val = submission_form.is_valid()
+                    #if submission_form.is_valid():
+                    if first_nav == 0:
+                        new_submission_store_items = IdeateIdea(ideateimage_store_location = request.FILES['ideateimage_store_location'],
+                                                                ideateidea_title = request.POST['ideateidea_title'],
+                                                                user_id = user_contest_assignment_info.user_id,
+                                                                contest_id = user_contest_assignment_info.contest_id,
+                                                                ideateidea_description = 'description save error')
+                        #new_submission_store_items.ideateimage_store_location = request.FILES['ideateimage_store_location']
+                        #new_submission_store_items.ideateidea_title = request.POST['ideateidea_title']
+                        #new_submission_store_items.user_id = active_user.user_id
+                        #new_submission_store_items.contest_id = contest_id
+                        #new_submission_store_items.ideateidea_description = 'description save error' ###request.POST['ideateidea_description']                                                                                                                                                              ideateidea_title = request.POST['ideateidea_title'],                                                                                                                                                                ideateidea_description = request.POST['ideatedesc_store'],)			
+
+                        new_submission_store_items.save()
+
+
+                        return HttpResponseRedirect('/ideaphase/contest_landing_page/')
+                                
+                    else:
+                        first_nav = 0
+                        submission_form = IdeateIdeaSubmissionForm()#shows empty form
+                    
+
+            else:
+                #This block will only be executed if the user navigated directly to this page.
+                submission_form = IdeateIdeaSubmissionForm() #shows empty form
+                contest_id = 1	    
+                val = "no HTTP POST"
+                first_nav = 1
+                return HttpResponseRedirect('/ideaphase/contest_landing_page/')
+    
+	else:
+            #User is not logged in
+	    return HttpResponseRedirect('ideaphase/home/')
       
-    return render_to_response("ideaphase/submit_idea.html",
-                              {'ActiveUser':active_user},
+	return render_to_response("ideaphase/submit_idea.html",
+                              {'ActiveUser':active_user,
+                               'form': submission_form,
+                               'contest_id': contest_id,
+                               'val': val,
+                               'first_nav':first_nav},
                               context_instance=RequestContext(request))
+
+
 
 def contest_landing_page(request):
     #Handles User Login Attempt
@@ -347,20 +346,29 @@ def contest_landing_page(request):
         #if a button is clicked on contest main, it posts the variable
         if request.method=='POST':
             contest_click = request.POST['contest_id']
+            contest_id = ContestInfo.objects.get(contest_id = contest_click)
+            ideate_ideas_to_display = IdeateIdea.objects.filter(contest_id = contest_id)
+
+
+
+            
             return render_to_response('ideaphase/contest_landing_page.html',
-                                      {'contest_id': contest_click },
+                                      {'contest_id': contest_click,
+                                       'ideas': ideate_ideas_to_display,
+                                       'contest': contest_id},
                                       context_instance=RequestContext(request))
 
 
 
-
+        else:
+            #the user navigated directly to this page.
+            return HttpResponseRedirect('ideaphase/contests_main/')
     else:
         return HttpResponseRedirect('ideaphase/home/')
       
     return render_to_response("ideaphase/contest_landing_page.html",
                               {'ActiveUser':active_user},
                               context_instance=RequestContext(request))
->>>>>>> b55c111a54f56afa6c6443d54ae983f6f25901ef
 
 ## view template below:
 ##def view_template(request):

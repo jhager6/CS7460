@@ -30,7 +30,7 @@
                     <p><b>Contest Description: </b>{{ contest.contest_description }}</p>
                     <p><b>Contest End Date: </b>{{ contest.contest_enddate }}</p>
                     <form method="POST" action="{% url 'contest_landing_page' %}">{% csrf_token %}
-                        <input type="hidden" name="contest_id" value="{{ contest.contest_id.contest_id }}" />
+                        <input type="hidden" name="contest_id" value="{{ contest.contest_id }}" />
                         <input type="submit" value="Go to Contest >>" class="btn btn-default" />
                     </form>
                 </div>
@@ -38,5 +38,5 @@
             {% endfor %}
         {% endif %}
     <br />
-                        {{ contestx }}
+                        {{ my_contests }}
 {% endblock %}
